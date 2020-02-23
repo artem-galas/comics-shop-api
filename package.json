@@ -1,0 +1,42 @@
+{
+  "name": "comics-shop-api",
+  "version": "1.0.0",
+  "description": "Comics Shop Api",
+  "main": "index.js",
+  "author": "Artem Halas",
+  "license": "MIT",
+  "scripts": {
+    "dev": "docker-compose up",
+    "start": "tsc-watch --onSuccess \"node ./dist/app/app.js\"",
+    "build": "tsc",
+    "knex:migrate:make": "knex --knexfile ./knexfile.ts -x ts migrate:make",
+    "knex:migrate:latest": "knex --knexfile ./knexfile.ts migrate:latest",
+    "knex:migrate:rollback": "knex --knexfile ./knexfile.ts migrate:rollback",
+    "knex:seed:run": "knex --knexfile ./knexfile.ts seed:run"
+  },
+  "dependencies": {
+    "@hapi/joi": "^17.1.0",
+    "@koa/cors": "^3.0.0",
+    "knex": "^0.20.8",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^8.0.6",
+    "pg": "^7.18.1",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.6",
+    "@types/hapi__joi": "^16.0.9",
+    "@types/koa": "^2.11.0",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-logger": "^3.1.1",
+    "@types/koa-router": "^7.4.0",
+    "@types/koa__cors": "^3.0.1",
+    "@types/node": "^13.7.0",
+    "@types/pg": "^7.14.1",
+    "tsc-watch": "^4.1.0"
+  }
+}

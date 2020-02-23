@@ -1,0 +1,24 @@
+version: "3"
+services:
+  comics-shop-api:
+    build: ./
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://user:developer@postgres:5432/comics_shop
+      NODE_ENV: development
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    command: sh -c "npm run knex:migrate:latest && npm run knex:seed:run && npm run start"
+    volumes:
+      - .:/app
+
+  postgres:
+    image: postgres:12-alpine
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: developer
+      POSTGRES_DB: comics_shop

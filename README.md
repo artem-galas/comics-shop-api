@@ -25,6 +25,8 @@ All responses looks like:
 }
 ```
 
+For more info please have a look to [DTO's](https://github.com/artem-galas/comics-shop-api/tree/master/app/src/dto)
+
 ### GET /api/characters
 ```ts
 Array<{

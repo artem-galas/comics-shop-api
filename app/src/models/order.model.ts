@@ -1,26 +1,17 @@
 import { pg, Tables } from '../db';
-import { Comics, ComicsModel } from './comics.model';
+import { Comics } from './comics.model';
 import { ServerError } from '../util/serverError';
+import { ComicsOrder, ComicsOrderCreateType } from './comics-order.model';
 
 export interface OrderModel {
   id: number;
   amount: number;
 }
 
-export interface ComicsOrderModel {
-  id: number;
-  comics_id: number;
-  order_id: number;
-  quantity: number;
-}
-
 type OrderCreateType = {
   comicsId: number,
   quantity: number;
 }[];
-
-type OrderComics = Pick<ComicsModel, 'id' | 'title' | 'price'>
-  & Pick<ComicsOrderModel, 'quantity'>
 
 export class Order {
   static async create(data: OrderCreateType) {
@@ -34,7 +25,7 @@ export class Order {
     const [order] = await pg<OrderModel>(Tables.orders)
       .insert({amount}, ['id', 'amount']);
 
-    const comicsOrdersData = data.map((cur): Omit<ComicsOrderModel, 'id'> => {
+    const comicsOrdersData = data.map((cur): ComicsOrderCreateType  => {
       return {
         order_id: order.id,
         comics_id: cur.comicsId,
@@ -42,8 +33,7 @@ export class Order {
       }
     });
 
-    await pg<ComicsOrderModel>(Tables.comics_orders)
-      .insert(comicsOrdersData);
+    await ComicsOrder.create(comicsOrdersData);
 
     return {...order}
   }
@@ -60,24 +50,6 @@ export class Order {
       })
     }
 
-    const comics: OrderComics = await pg<ComicsOrderModel>('comics_orders')
-      .where({order_id: order.id})
-      .from<ComicsModel>(Tables.comics)
-      .innerJoin(
-        Tables.comics_orders,
-        'comics.id',
-        'comics_orders.comics_id'
-      ).select(
-        'comics.id',
-        'comics.title',
-        'comics.price',
-        'comics_orders.quantity'
-      );
-
-    return {
-      id: order.id,
-      amount: order.amount,
-      comics,
-    }
+    return order;
   }
 }

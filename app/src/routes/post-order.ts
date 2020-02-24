@@ -9,7 +9,7 @@ const schema = Joi.object({
       comicsId: Joi.number().required(),
       quantity: Joi.number().required()
     })
-  )
+  ).required()
 });
 
 interface OrderRequestDTO {

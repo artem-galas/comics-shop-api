@@ -7,9 +7,9 @@ services:
     environment:
       DATABASE_URL: postgres://user:developer@postgres:5432/comics_shop
       NODE_ENV: development
-      PORT: 3000
+      PORT: 3001
     ports:
-      - "3000:3000"
+      - "3001:3001"
     command: sh -c "npm run knex:migrate:latest && npm run knex:seed:run && npm run start"
     volumes:
       - .:/app

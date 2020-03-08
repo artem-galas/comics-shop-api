@@ -1,20 +1,10 @@
 import { pg, Tables } from '../db';
 import { Comics } from './comics.model';
 import { ServerError } from '../util/serverError';
-import { ComicsOrder, ComicsOrderCreateType } from './comics-order.model';
-
-export interface OrderModel {
-  id: number;
-  amount: number;
-}
-
-type OrderCreateType = {
-  comicsId: number,
-  quantity: number;
-}[];
+import { ComicsOrder } from './comics-order.model';
 
 export class Order {
-  static async create(data: OrderCreateType) {
+  static async create(data) {
     const amount = await data.reduce(async (prev, current) => {
       const comics = await Comics.byId(current.comicsId);
       const price = comics.price * current.quantity;
@@ -22,10 +12,10 @@ export class Order {
       return totalPrice += price;
     }, Promise.resolve(0));
 
-    const [order] = await pg<OrderModel>(Tables.orders)
+    const [order] = await pg(Tables.orders)
       .insert({amount}, ['id', 'amount']);
 
-    const comicsOrdersData = data.map((cur): ComicsOrderCreateType  => {
+    const comicsOrdersData = data.map((cur)  => {
       return {
         order_id: order.id,
         comics_id: cur.comicsId,
@@ -38,17 +28,10 @@ export class Order {
     return {...order}
   }
 
-  static async byId(id: number) {
-    const order = await pg<OrderModel>(Tables.orders)
+  static async byId(id) {
+    const order = await pg(Tables.orders)
       .where({id})
       .first();
-
-    if (!order) {
-      throw new ServerError({
-        message: 'Order not Found',
-        status: 404,
-      })
-    }
 
     return order;
   }

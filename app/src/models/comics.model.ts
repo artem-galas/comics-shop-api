@@ -26,7 +26,7 @@ export class Comics {
     return comics;
   }
 
-  static byCharacterId(characterId: number) {
+  static async byCharacterId(characterId: number) {
     return pg<ComicsModel>(Tables.comics)
       .where({character_id: characterId});
   }

@@ -1,12 +1,7 @@
 import Knex from 'knex';
+const knexfile = require('../../../../knexfile');
 
-const databaseUrl = process.env.DATABASE_URL;
-
-export const pg = Knex({
-  client: 'pg',
-  connection: databaseUrl,
-  searchPath: ['knex', 'public']
-});
+export const pg = Knex(knexfile.test);
 
 export const Tables = {
   characters: 'characters',

@@ -13,12 +13,23 @@ const defaultSettings = {
   }
 };
 
-module.exports = {
+export const knexConfig = {
   development: {
     ...defaultSettings
   },
 
   production: {
     ...defaultSettings
+  },
+
+  test: {
+    ...defaultSettings,
+    client: 'sqlite3',
+    connection: { filename: ':memory:' },
+    useNullAsDefault: true,
   }
+};
+
+module.exports = {
+  ...knexConfig
 };

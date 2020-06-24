@@ -14,7 +14,7 @@ type OrderCreateType = {
 }[];
 
 export class Order {
-  static async create(data: OrderCreateType) {
+  static async create(data: OrderCreateType): Promise<OrderModel> {
     const amount = await data.reduce(async (prev, current) => {
       const comics = await Comics.byId(current.comicsId);
       const price = comics.price * current.quantity;
